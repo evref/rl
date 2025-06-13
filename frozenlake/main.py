@@ -1,28 +1,49 @@
 import gymnasium as gym
-import numpy as np
 
-env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=False, render_mode="human", max_episode_steps=100)
-observation, info = env.reset()
-
-num_states = env.observation_space.n
-num_actions = env.action_space.n
-qtable = np.zeros((num_states, num_actions))
+from agents import QLearningAgent, FrozenLakeAgent
 
 
-episode_over = False
-while not episode_over:
-    max_reward_action = np.argmax(qtable[observation])
-    if (qtable[observation, max_reward_action] == 0):
-        print("No value in qtable, I pick random!!")
-        action = env.action_space.sample()
-    else:
-        print("I know exactly what to do!")
-        action = max_reward_action
+MAX_STEPS = 100
 
-    observation, reward, terminated, truncated, info = env.step(action)
+def run_sim(env: gym.Env, agent: FrozenLakeAgent):
+    obs, _ = env.reset()
 
-    episode_over = terminated or truncated
+    episode_over = False
+    while not episode_over:
+        action = agent.get_action(env, obs)
 
-env.close()
-if reward > 0:
-    print("HE DIDIT BOYS")
+        last_obs = obs
+
+        obs, reward, terminated, truncated, _ = env.step(action)
+        agent.update(action, reward, obs, last_obs)
+
+        episode_over = terminated or truncated
+
+    env.close()
+        
+    if reward > 0:
+        print("WE DIDIT BOYS")
+
+
+agent = QLearningAgent(observation_space_size=16, 
+                       action_space_size=4, 
+                       learning_rate=0.5)
+
+env = gym.make('FrozenLake-v1', 
+               desc=None, 
+               map_name="4x4", 
+               is_slippery=False, 
+               max_episode_steps=MAX_STEPS)
+for i in range(150):
+    print(f"Running simulation # {i}")
+    run_sim(env, agent)
+
+
+env = gym.make('FrozenLake-v1', 
+               desc=None, 
+               map_name="4x4", 
+               is_slippery=False, 
+               render_mode="human", 
+               max_episode_steps=MAX_STEPS)
+
+run_sim(env, agent)
