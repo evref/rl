@@ -6,6 +6,13 @@ from agents import QLearningAgent, FrozenLakeAgent
 MAX_STEPS = 100
 
 def run_sim(env: gym.Env, agent: FrozenLakeAgent):
+    """
+    Run simulation once.
+
+    Args:
+        env: The gymnasium environment
+        agent: A FrozenLakeAgent instance to be trained     
+    """
     obs, _ = env.reset()
 
     episode_over = False
