@@ -15,7 +15,7 @@ More about it can be found on the website: https://gymnasium.farama.org/environm
 ## Q-Learning Agent
 This agent is taught to solve a specific FrozenLake Challenge grid using the Q-Learning method, defined by the following equation:
 
-$ Q_{new}(s_t,a_t)=Q(s_t,a_t)+\alpha*(r_t+\gamma*max_aQ(s_{t+1},a)-Q(s_t,a_t)) $
+$Q_{new}(s_t,a_t)=Q(s_t,a_t)+\alpha*(r_t+\gamma*max_aQ(s_{t+1},a)-Q(s_t,a_t))$
 
 Where 
 - $s_t$ is the observation state at timestep $t$
